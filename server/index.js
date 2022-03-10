@@ -16,6 +16,10 @@ io.on('connection', (socket) => {
     socket.on('init', (payload) => {
         console.log(payload);
     });
+    socket.on('send message', (item) => {
+        console.log(item.name + " : " + item.message);
+        io.emit('receive message', item);
+    });
 });
 
 app.get('/', (req, res) => {
