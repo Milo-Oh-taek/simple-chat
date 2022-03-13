@@ -1,10 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 import io from "socket.io-client";
 const socket = io.connect("http://localhost:3001");
 socket.emit("init", { name: "milo" });
 
 function App() {
+  const [msg, setMsg] = useState("");
+  const [msgArr, setMsgArr] = useState([]);
+  const scrollRef = useRef();
+
+  const sendMsg = () => {
+    socket.emit("send message", { name: "milo", message: msg });
+  };
+
+  const scrollToBottom = () => {
+    scrollRef.current.scrollIntoView({ block: "end" });
+  };
+
   useEffect(() => {
     return () => {
       socket.close();
@@ -12,17 +24,15 @@ function App() {
   }, []);
 
   useEffect(() => {
+    scrollToBottom();
+    console.log("scroll");
+  }, [msgArr]);
+
+  useEffect(() => {
     socket.on("receive message", (message) => {
       setMsgArr((msgArr) => msgArr.concat(message));
     });
   }, []);
-
-  const [msg, setMsg] = useState("");
-  const [msgArr, setMsgArr] = useState([]);
-
-  const sendMsg = () => {
-    socket.emit("send message", { name: "milo", message: msg });
-  };
 
   return (
     <div className="App">
@@ -35,12 +45,29 @@ function App() {
             height: "80vh",
           }}
         >
-          {msgArr.map((elem) => (
-            <div>
-              <p style={{ fontWeight: "bold" }}>{elem.name}</p>
-              <p>{elem.message}</p>
-            </div>
-          ))}
+          <div
+            ref={scrollRef}
+            style={{
+              height: "100%",
+              paddingLeft: "1rem",
+              overflow: "auto",
+            }}
+          >
+            {msgArr.map((elem) => (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "left",
+                  height: "2rem",
+                }}
+              >
+                <p style={{ fontWeight: "bold", paddingRight: "1rem" }}>
+                  {elem.name}{" "}
+                </p>
+                <p>{elem.message}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
