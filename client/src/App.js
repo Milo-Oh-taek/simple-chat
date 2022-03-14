@@ -9,12 +9,14 @@ function App() {
   const [msgArr, setMsgArr] = useState([]);
   const scrollRef = useRef();
 
-  const sendMsg = () => {
-    socket.emit("send message", { name: "milo", message: msg });
+  const sendMsg = (e) => {
+    e.preventDefault();
+    socket.emit("send message", { name: "milo", message: msg }, setMsg(""));
   };
 
   const scrollToBottom = () => {
-    scrollRef.current.scrollIntoView({ block: "end" });
+    // scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
 
   useEffect(() => {
@@ -34,6 +36,11 @@ function App() {
     });
   }, []);
 
+  const topTest = () => {
+    // scrollRef.current.scrollIntoView({ block: "end" });
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  };
+
   return (
     <div className="App">
       <h1>chat</h1>
@@ -50,18 +57,22 @@ function App() {
             style={{
               height: "100%",
               paddingLeft: "1rem",
-              overflow: "auto",
+              // margin: '1rem',
+              marginBottom: "2rem",
+              overflowY: "scroll",
+              wordBreak: 'break-all'
             }}
           >
             {msgArr.map((elem) => (
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  // justifyContent: "left",
+                  // alignItems: "center",
                   height: "2rem",
                 }}
               >
-                <p style={{ fontWeight: "bold", paddingRight: "1rem" }}>
+                <p style={{ fontWeight: "bold", paddingRight: "1rem", width:'5rem' }}>
                   {elem.name}{" "}
                 </p>
                 <p>{elem.message}</p>
@@ -71,10 +82,22 @@ function App() {
         </div>
       </div>
 
-      <div>
-        <input onChange={(e) => setMsg(e.target.value)}></input>
-        <button onClick={sendMsg}>Send</button>
-      </div>
+      <form
+        onSubmit={sendMsg}
+        style={{ width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        <div
+          style={{ width: "60vw", display: "flex", justifyContent: "center" }}
+        >
+          <input
+            type='text'
+            value={msg}
+            onChange={(e) => setMsg(e.target.value)}
+            style={{ width: "100%", height:'2rem' }}
+          ></input>
+          <button>Send</button>
+        </div>
+      </form>
     </div>
   );
 }
