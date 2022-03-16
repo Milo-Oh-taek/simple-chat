@@ -14,9 +14,9 @@ const Home = () => {
       <DivContainer>
         <div
           style={{
-            position: 'absolute',
-            top:'50%',
-            left:'25%'
+            position: "absolute",
+            top: "50%",
+            left: "25%",
           }}
         >
           <div
@@ -26,10 +26,14 @@ const Home = () => {
               backgroundColor: "red",
               zIndex: "10",
               textAlign: "center",
-              top:'50%',
+              top: "50%",
             }}
           >
-            Choose your nickname
+            <h1>Choose your nickname</h1>
+            <input></input>
+            <div>
+              <button>Select</button>
+            </div>
           </div>
         </div>
       </DivContainer>
