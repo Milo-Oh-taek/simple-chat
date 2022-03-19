@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const DivContainer = styled.div`
@@ -8,33 +8,49 @@ const DivContainer = styled.div`
   background-size: 100% 100%;
 `;
 
+const NicknamePopup = styled.div`
+  position: absolute;
+  width: 50vw;
+  height: 40vh;
+  background-color: #f7f7f7;
+  text-align: center;
+  opacity: 0.8;
+  z-index: 10;
+`;
+
 const Home = () => {
+  const [nickname, setNickname] = useState("");
+  const [nicknameChk, setNicknameChk] = useState(false);
+
+  const nicknameHandler = () => {
+    setNicknameChk(true);
+  }
+
   return (
     <>
       <DivContainer>
         <div
           style={{
             position: "absolute",
-            top: "50%",
+            top: "30%",
             left: "25%",
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              width: "50vw",
-              backgroundColor: "red",
-              zIndex: "10",
-              textAlign: "center",
-              top: "50%",
-            }}
-          >
+          {nicknameChk? (
+            <div></div>
+          ) : (
+            <NicknamePopup>
             <h1>Choose your nickname</h1>
-            <input></input>
+            <input
+              onChange={(e) => setNickname(e.target.value)}
+              style={{ margin: "3rem" }}
+            ></input>
             <div>
-              <button>Select</button>
+              <button onClick={nicknameHandler}>Select</button>
             </div>
-          </div>
+          </NicknamePopup>
+          )}
+          
         </div>
       </DivContainer>
     </>
