@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const DivContainer = styled.div`
@@ -19,11 +20,17 @@ const NicknamePopup = styled.div`
 `;
 
 const Home = () => {
+  let navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const [nicknameChk, setNicknameChk] = useState(false);
+  const [chatRoom, setChatRoom] = useState('');
 
   const nicknameHandler = () => {
     setNicknameChk(true);
+  }
+
+  const joinHandler = () => {
+    navigate(`/${chatRoom}/${nickname}`);
   }
 
   return (
@@ -37,7 +44,16 @@ const Home = () => {
           }}
         >
           {nicknameChk? (
-            <div></div>
+            <NicknamePopup>
+            <h1>Chat Rooms</h1>
+            <div>
+              <input type='radio' value='fashion' checked={chatRoom === 'fashion'} onChange={(e) => setChatRoom(e.target.value)} />Fashion
+              <input type='radio' value='sports' checked={chatRoom === 'sports'} onChange={(e) => setChatRoom(e.target.value)} />Sports
+            </div>
+            <div>
+              <button onClick={joinHandler}>Join</button>
+            </div>
+          </NicknamePopup>
           ) : (
             <NicknamePopup>
             <h1>Choose your nickname</h1>

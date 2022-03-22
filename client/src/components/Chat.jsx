@@ -1,17 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Routes, Route, useParams } from "react-router-dom";
 
 import io from "socket.io-client";
 const socket = io.connect("http://localhost:3001");
-socket.emit("init", { name: "milo" });
 
 const Chat = () => {
+  const params = useParams();
+  const chatroom = params.room;
+  const nickname = params.nickname;
+  const scrollRef = useRef();
+
   const [msg, setMsg] = useState("");
   const [msgArr, setMsgArr] = useState([]);
-  const scrollRef = useRef();
+  
 
   const sendMsg = (e) => {
     e.preventDefault();
-    socket.emit("send message", { name: "milo", message: msg }, setMsg(""));
+    socket.emit("send message", { name: "milo", message: msg, chatroom }, setMsg(""));
   };
 
   const scrollToBottom = () => {
@@ -19,6 +24,8 @@ const Chat = () => {
   };
 
   useEffect(() => {
+    socket.emit("init", chatroom);
+    console.log(chatroom);
     return () => {
       socket.close();
     };

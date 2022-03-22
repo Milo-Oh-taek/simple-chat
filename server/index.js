@@ -14,11 +14,12 @@ const io = socketio(server, {
 io.on('connection', (socket) => {
     console.log('connection');
     socket.on('init', (payload) => {
+        socket.join(payload);
         console.log(payload);
     });
     socket.on('send message', (item) => {
-        console.log(item.name + " : " + item.message);
-        io.emit('receive message', item);
+        console.log(item.name + " : " + item.message + " : " + item.chatroom);
+        io.to(item.chatroom).emit('receive message', item);
     });
 });
 
