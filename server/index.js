@@ -18,7 +18,7 @@ io.on('connection', (socket) => {
         console.log(payload);
     });
     socket.on('send message', (item) => {
-        console.log(item.name + " : " + item.message + " : " + item.chatroom);
+        console.log(item.nickname + " : " + item.message + " : " + item.chatroom);
         io.to(item.chatroom).emit('receive message', item);
     });
 });

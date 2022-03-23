@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Routes, Route, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import io from "socket.io-client";
 const socket = io.connect("http://localhost:3001");
@@ -16,7 +16,7 @@ const Chat = () => {
 
   const sendMsg = (e) => {
     e.preventDefault();
-    socket.emit("send message", { name: "milo", message: msg, chatroom }, setMsg(""));
+    socket.emit("send message", { name: nickname, message: msg, chatroom }, setMsg(""));
   };
 
   const scrollToBottom = () => {
@@ -44,7 +44,7 @@ const Chat = () => {
 
   return (
     <div className="App">
-      <h1>chat</h1>
+      <h1>{chatroom}</h1>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div
           style={{
